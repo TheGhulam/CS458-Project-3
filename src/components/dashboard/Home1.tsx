@@ -56,7 +56,17 @@ const Home1 = () => {
   }
 
   const getSunPosition = () => {
-    return { latitude: 0, longitude: longitude || 0 }
+    const currentDate = new Date()
+    const dayOfYear = getDayOfYear(currentDate)
+    const sunLongitude = (dayOfYear - 80) / 365.25 * 360 // Approximate Sun's longitude based on the day of the year
+    return { latitude: 0, longitude: sunLongitude }
+  }
+
+  const getDayOfYear = (date: Date) => {
+    const start = new Date(date.getFullYear(), 0, 0)
+    const diff = date.getTime() - start.getTime()
+    const oneDay = 1000 * 60 * 60 * 24
+    return Math.floor(diff / oneDay)
   }
 
   const getEarthSunDistance = () => {
@@ -113,7 +123,7 @@ const Home1 = () => {
         </Button>
         {distance && (
           <Typography variant="body1" mt={2}>
-            The distance to the Sun is approximately {distance.toFixed(1)} kilometers.
+            The distance to the Sun is approximately {distance.toFixed(0)} kilometers.
           </Typography>
         )}
       </Container>
