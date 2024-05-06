@@ -13,12 +13,24 @@ class LoginTestCases(unittest.TestCase):
         self.driver = webdriver.Edge()
         self.driver.get("https://cs458.gahmed.com")
 
+    def login(self):
+        """Log in to the application."""
+        driver = self.driver
+        driver.find_element(By.NAME, "email").send_keys("test@gmail.com")
+        driver.find_element(By.NAME, "password").send_keys("1")
+        driver.find_element(
+            By.XPATH, "//button[contains(text(),'Sign in Now')]"
+        ).click()
+        WebDriverWait(driver, 10).until(EC.url_contains("/home"))
+
     def test_successful_login(self):
         """Test user can login successfully with correct credentials."""
         driver = self.driver
         driver.find_element(By.NAME, "email").send_keys("test@gmail.com")
         driver.find_element(By.NAME, "password").send_keys("1")
-        driver.find_element(By.XPATH, "//button[contains(text(),'Sign in Now')]").click()
+        driver.find_element(
+            By.XPATH, "//button[contains(text(),'Sign in Now')]"
+        ).click()
         WebDriverWait(driver, 10).until(EC.url_contains("/home"))
 
     def test_invalid_login(self):
@@ -26,14 +38,20 @@ class LoginTestCases(unittest.TestCase):
         driver = self.driver
         driver.find_element(By.NAME, "email").send_keys("wrong@example.com")
         driver.find_element(By.NAME, "password").send_keys("wrongpassword")
-        driver.find_element(By.XPATH, "//button[contains(text(),'Sign in Now')]").click()
-       
+        driver.find_element(
+            By.XPATH, "//button[contains(text(),'Sign in Now')]"
+        ).click()
+
         WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//div[contains(@class,'Toastify__toast--error')]"))
+            EC.visibility_of_element_located(
+                (By.XPATH, "//div[contains(@class,'Toastify__toast--error')]")
+            )
         )
-        error_message = driver.find_element(By.XPATH, "//div[contains(@class,'Toastify__toast--error')]")
+        error_message = driver.find_element(
+            By.XPATH, "//div[contains(@class,'Toastify__toast--error')]"
+        )
         self.assertIn("Invalid credentials", error_message.text)
-   
+
     def test_login_with_enter(self):
         """Test login functionality by pressing Enter key."""
         driver = self.driver
@@ -47,25 +65,36 @@ class LoginTestCases(unittest.TestCase):
         driver.find_element(By.NAME, "email").send_keys("test.gmail")
 
         email_error = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, "p.MuiFormHelperText-root.Mui-error"))
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "p.MuiFormHelperText-root.Mui-error")
+            )
         )
         self.assertIn("Invalid email", email_error.text)
 
     def test_empty_fields(self):
         """Test validation messages for empty fields."""
         driver = self.driver
-        driver.find_element(By.XPATH, "//button[contains(text(),'Sign in Now')]").click()
+        driver.find_element(
+            By.XPATH, "//button[contains(text(),'Sign in Now')]"
+        ).click()
 
         email_error = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, "p.MuiFormHelperText-root.Mui-error"))
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "p.MuiFormHelperText-root.Mui-error")
+            )
         )
         self.assertIn("Invalid email", email_error.text)
 
         all_errors = WebDriverWait(driver, 10).until(
-            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "p.MuiFormHelperText-root.Mui-error"))
+            EC.visibility_of_all_elements_located(
+                (By.CSS_SELECTOR, "p.MuiFormHelperText-root.Mui-error")
+            )
         )
         password_error = all_errors[1] if len(all_errors) > 1 else None
-        self.assertIn("String must contain at least 1 character(s)", password_error.text if password_error else "")
+        self.assertIn(
+            "String must contain at least 1 character(s)",
+            password_error.text if password_error else "",
+        )
 
     # def test_google_login(self):
     #     """Test logging in using Google OAuth."""
@@ -98,9 +127,58 @@ class LoginTestCases(unittest.TestCase):
     def test_ui_elements_presence(self):
         """Check all UI elements are present."""
         driver = self.driver
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "email")))
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "password")))
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Sign in Now')]")))
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.NAME, "email"))
+        )
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.NAME, "password"))
+        )
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//button[contains(text(),'Sign in Now')]")
+            )
+        )
+
+    def test_nearest_sea_section_presence(self):
+        """Check if the Nearest Sea section is present on the home page."""
+        driver = self.driver
+        self.login()
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//h4[contains(text(),'Nearest Sea')]")
+            )
+        )
+
+    def test_user_location_displayed(self):
+        """Test if the user's location (latitude and longitude) is displayed on the home page."""
+        driver = self.driver
+        self.login()
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//span[contains(text(),'based on your location')]")
+            )
+        )
+        location_text = driver.find_element(
+            By.XPATH, "//span[contains(text(),'based on your location')]"
+        ).text
+        self.assertRegex(location_text, r"\(-?\d+\.\d+, -?\d+\.\d+\)")
+
+    def test_nearest_sea_calculation(self):
+        """Test if the nearest sea and distance are calculated and displayed correctly."""
+        driver = self.driver
+        self.login()
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//p[contains(text(),'The nearest sea is')]")
+            )
+        )
+        nearest_sea_text = driver.find_element(
+            By.XPATH, "//p[contains(text(),'The nearest sea is')]"
+        ).text
+        self.assertRegex(
+            nearest_sea_text,
+            r"The nearest sea is .+, approximately \d+\.\d+ kilometers away\.",
+        )
 
     def tearDown(self):
         """Tear down the test environment after each test."""
