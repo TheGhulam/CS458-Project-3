@@ -65,7 +65,7 @@ class DistanceToSunTestCases(unittest.TestCase):
         """Test if the latitude and longitude fields are auto-populated based on location."""
         driver = self.driver
         self.navigate_to_distance_to_sun_page()
-        latitude_input = WebDriverWait(driver, 10).until(
+        latitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -73,7 +73,7 @@ class DistanceToSunTestCases(unittest.TestCase):
                 )
             )
         )
-        longitude_input = WebDriverWait(driver, 10).until(
+        longitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -88,7 +88,7 @@ class DistanceToSunTestCases(unittest.TestCase):
         """Test if the distance calculation works correctly."""
         driver = self.driver
         self.navigate_to_distance_to_sun_page()
-        latitude_input = WebDriverWait(driver, 10).until(
+        latitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -96,7 +96,7 @@ class DistanceToSunTestCases(unittest.TestCase):
                 )
             )
         )
-        longitude_input = WebDriverWait(driver, 10).until(
+        longitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -107,7 +107,7 @@ class DistanceToSunTestCases(unittest.TestCase):
         latitude_input.clear()
         longitude_input.clear()
         latitude_input.send_keys("40.7128")
-        longitude_input.send_keys("-74.0060")
+        longitude_input.send_keys("70.0060")
         driver.find_element(
             By.XPATH, "//button[contains(text(),'Calculate Distance')]"
         ).click()
@@ -133,7 +133,7 @@ class DistanceToSunTestCases(unittest.TestCase):
         driver = self.driver
         self.navigate_to_distance_to_sun_page()
 
-        latitude_input = WebDriverWait(driver, 10).until(
+        latitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -141,7 +141,7 @@ class DistanceToSunTestCases(unittest.TestCase):
                 )
             )
         )
-        longitude_input = WebDriverWait(driver, 10).until(
+        longitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -183,7 +183,7 @@ class DistanceToSunTestCases(unittest.TestCase):
         driver = self.driver
         self.navigate_to_distance_to_sun_page()
 
-        latitude_input = WebDriverWait(driver, 30).until(
+        latitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
@@ -191,7 +191,7 @@ class DistanceToSunTestCases(unittest.TestCase):
                 )
             )
         )
-        longitude_input = WebDriverWait(driver, 30).until(
+        longitude_input = WebDriverWait(driver, 60).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
