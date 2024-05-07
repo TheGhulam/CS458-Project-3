@@ -96,33 +96,33 @@ class LoginTestCases(unittest.TestCase):
             password_error.text if password_error else "",
         )
 
-    # def test_google_login(self):
-    #     """Test logging in using Google OAuth."""
-    #     driver = self.driver
-    #     main_window_handle = driver.current_window_handle
+    def test_google_login(self):
+        """Test logging in using Google OAuth."""
+        driver = self.driver
+        main_window_handle = driver.current_window_handle
 
-    #     WebDriverWait(driver, 10).until(
-    #         EC.element_to_be_clickable((By.XPATH, "//div[@role='button'][@aria-labelledby='button-label']"))
-    #     )
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//div[@role='button'][@aria-labelledby='button-label']"))
+        )
 
-    #     google_sign_in_button = driver.find_element(By.XPATH, "//div[@role='button'][@aria-labelledby='button-label']")
-    #     google_sign_in_button.click()
+        google_sign_in_button = driver.find_element(By.XPATH, "//div[@role='button'][@aria-labelledby='button-label']")
+        google_sign_in_button.click()
 
-    #     WebDriverWait(driver, 10).until(EC.number_of_windows_to_be(2))
+        WebDriverWait(driver, 10).until(EC.number_of_windows_to_be(2))
 
-    #     google_login_window_handle = [handle for handle in driver.window_handles if handle != main_window_handle][0]
-    #     driver.switch_to.window(google_login_window_handle)
+        google_login_window_handle = [handle for handle in driver.window_handles if handle != main_window_handle][0]
+        driver.switch_to.window(google_login_window_handle)
 
-    #     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "identifierId"))).send_keys("test@gmail.com")
-    #     driver.find_element(By.ID, "identifierNext").click()
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "identifierId"))).send_keys("test@gmail.com")
+        driver.find_element(By.ID, "identifierNext").click()
 
-    #     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "password"))).send_keys("1")
-    #     driver.find_element(By.ID, "passwordNext").click()
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "password"))).send_keys("1")
+        driver.find_element(By.ID, "passwordNext").click()
 
-    #     WebDriverWait(driver, 20).until(EC.number_of_windows_to_be(1))
-    #     driver.switch_to.window(main_window_handle)
+        WebDriverWait(driver, 20).until(EC.number_of_windows_to_be(1))
+        driver.switch_to.window(main_window_handle)
 
-    #     WebDriverWait(driver, 10).until(EC.url_contains("/home"))
+        WebDriverWait(driver, 10).until(EC.url_contains("/home"))
 
     def test_ui_elements_presence(self):
         """Check all UI elements are present."""
