@@ -255,7 +255,6 @@ class DistanceToSunTestCases(unittest.TestCase):
         driver = self.driver
         self.navigate_to_distance_to_sun_page()
 
-        # Wait for the latitude and longitude input fields to be present
         latitude_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
                 (
@@ -276,7 +275,6 @@ class DistanceToSunTestCases(unittest.TestCase):
         latitude_value = latitude_input.get_attribute("value")
         longitude_value = longitude_input.get_attribute("value")
 
-        # Assert that the latitude and longitude fields are populated
         self.assertEqual(latitude_value, "", "Latitude field is empty")
         self.assertEqual(longitude_value, "", "Longitude field is empty")
 
@@ -305,15 +303,12 @@ class DistanceToSunTestCases(unittest.TestCase):
         latitude_input.clear()
         longitude_input.clear()
 
-        # Enter a combination of numbers and letters for latitude and longitude
         latitude_input.send_keys("40.7128abc")
         longitude_input.send_keys("-74.0060xyz")
 
-        # Get the current values of the input fields
         latitude_value = latitude_input.get_attribute("value")
         longitude_value = longitude_input.get_attribute("value")
 
-        # Assert that the input fields only contain numbers
         self.assertRegex(latitude_value, r"^-?\d+(\.\d+)?$")
         self.assertRegex(longitude_value, r"^-?\d+(\.\d+)?$")
 
@@ -322,14 +317,12 @@ class DistanceToSunTestCases(unittest.TestCase):
         driver = self.driver
         self.navigate_to_distance_to_sun_page()
 
-        # Test responsiveness on different screen sizes
         screen_sizes = [(1024, 768), (768, 1024), (414, 896), (375, 667)]
 
         for size in screen_sizes:
             width, height = size
             driver.set_window_size(width, height)
 
-            # Check if the elements are still visible and functional
             latitude_input = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Latitude')]/following-sibling::div/input"))
             )
