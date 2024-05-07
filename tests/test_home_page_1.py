@@ -249,6 +249,146 @@ class DistanceToSunTestCases(unittest.TestCase):
         ).text
         self.assertEqual(error_text, "Please enter latitude and longitude.")
 
+
+    def test_gps_disabled(self):
+        """Test if the application populates latitude and longitude when GPS is disabled."""
+        driver = self.driver
+        self.navigate_to_distance_to_sun_page()
+
+        # Wait for the latitude and longitude input fields to be present
+        latitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "//label[contains(text(),'Latitude')]/following-sibling::div/input",
+                )
+            )
+        )
+        longitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "//label[contains(text(),'Longitude')]/following-sibling::div/input",
+                )
+            )
+        )
+
+        latitude_value = latitude_input.get_attribute("value")
+        longitude_value = longitude_input.get_attribute("value")
+
+        # Assert that the latitude and longitude fields are populated
+        self.assertEqual(latitude_value, "", "Latitude field is empty")
+        self.assertEqual(longitude_value, "", "Longitude field is empty")
+
+    def test_valid_input_format(self):
+        """Test if the application only accepts numbers for latitude and longitude."""
+        driver = self.driver
+        self.navigate_to_distance_to_sun_page()
+
+        latitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "//label[contains(text(),'Latitude')]/following-sibling::div/input",
+                )
+            )
+        )
+        longitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "//label[contains(text(),'Longitude')]/following-sibling::div/input",
+                )
+            )
+        )
+
+        latitude_input.clear()
+        longitude_input.clear()
+
+        # Enter a combination of numbers and letters for latitude and longitude
+        latitude_input.send_keys("40.7128abc")
+        longitude_input.send_keys("-74.0060xyz")
+
+        # Get the current values of the input fields
+        latitude_value = latitude_input.get_attribute("value")
+        longitude_value = longitude_input.get_attribute("value")
+
+        # Assert that the input fields only contain numbers
+        self.assertRegex(latitude_value, r"^-?\d+(\.\d+)?$")
+        self.assertRegex(longitude_value, r"^-?\d+(\.\d+)?$")
+
+    def test_responsiveness(self):
+        """Test if the application is responsive on various screen sizes."""
+        driver = self.driver
+        self.navigate_to_distance_to_sun_page()
+
+        # Test responsiveness on different screen sizes
+        screen_sizes = [(1024, 768), (768, 1024), (414, 896), (375, 667)]
+
+        for size in screen_sizes:
+            width, height = size
+            driver.set_window_size(width, height)
+
+            # Check if the elements are still visible and functional
+            latitude_input = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Latitude')]/following-sibling::div/input"))
+            )
+            longitude_input = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Longitude')]/following-sibling::div/input"))
+            )
+            calculate_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Calculate Distance')]"))
+            )
+
+            self.assertTrue(latitude_input.is_displayed())
+            self.assertTrue(longitude_input.is_displayed())
+            self.assertTrue(calculate_button.is_enabled())
+
+    def test_calculate_button_enabled(self):
+        """Test if the Calculate Distance button is enabled when the fields are empty and gives an error message when they are."""
+        driver = self.driver
+        self.navigate_to_distance_to_sun_page()
+
+        latitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Latitude')]/following-sibling::div/input"))
+        )
+        longitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Longitude')]/following-sibling::div/input"))
+        )
+
+        latitude_input.clear()
+        longitude_input.clear()
+
+        calculate_button = driver.find_element(By.XPATH, "//button[contains(text(),'Calculate Distance')]")
+        self.assertTrue(calculate_button.is_enabled())
+
+    def test_distance_format(self):
+        """Test if the calculated distance is displayed in the correct format."""
+        driver = self.driver
+        self.navigate_to_distance_to_sun_page()
+
+        latitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Latitude')]/following-sibling::div/input"))
+        )
+        longitude_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//label[contains(text(),'Longitude')]/following-sibling::div/input"))
+        )
+
+        calculate_button = WebDriverWait(driver, 20).until(
+        EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Calculate Distance')]"))
+        )
+        calculate_button.click()
+
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//p[contains(text(),'The distance to the Sun is approximately')]"))
+        )
+
+        distance_text = driver.find_element(By.XPATH, "//p[contains(text(),'The distance to the Sun is approximately')]").text
+        self.assertRegex(
+            distance_text,
+            r"The distance to the Sun is approximately \d+ kilometers\.",
+        )
+
     def tearDown(self):
         """Tear down the test environment after each test."""
         self.driver.quit()
