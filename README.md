@@ -3,6 +3,10 @@
 ## Introduction
 This repository contains a Next.js project that is hosted on Vercel at [cs458.gahmed.com](https://cs458.gahmed.com) or run locally. It also includes Selenium tests located in the `tests` directory.
 
+Test User Credentials:
+- Username: `test@gmail.com`
+- Password: `1`
+
 ## Getting Started
 
 ### Prerequisites
