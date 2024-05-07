@@ -1,7 +1,7 @@
 # CS458 Project 3
 
 ## Introduction
-This repository contains a Next.js project that is hosted on Vercel at [cs458.gahmed.app](https://cs458.gahmed.app) or run locally. It also includes Selenium tests located in the `tests` directory.
+This repository contains a Next.js project that is hosted on Vercel at [cs458.gahmed.com](https://cs458.gahmed.com) or run locally. It also includes Selenium tests located in the `tests` directory.
 
 ## Getting Started
 
@@ -49,4 +49,4 @@ To run the tests:
     ```
 
 ### Modifying Test Configuration
-If you are running the app locally and wish to run the Selenium tests against it, replace the URL in the test scripts from `cs458.gahmed.app` to your local server's URL, typically `http://localhost:3000`
+If you are running the app locally and wish to run the Selenium tests against it, replace the URL in the test scripts from `cs458.gahmed.com` to your local server's URL, typically `http://localhost:3000`
