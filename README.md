@@ -37,8 +37,22 @@ npm run dev
 ```
 This will start the Next.js development server. By default, the app will be available at http://localhost:3000.
 
-## Running the Tests
+## Testing
 The Selenium tests for this project are located in the `tests` directory. These tests are designed to run against the Vercel hosted app but can be modified to run locally.
+
+### WebDriver Setup
+Before running the Selenium tests, you need to set up the appropriate WebDriver for your browser.
+
+1. Download the WebDriver for your preferred browser:
+
+- Chrome: ChromeDriver
+- Firefox: GeckoDriver
+- Safari: SafariDriver
+- Edge: EdgeDriver
+
+2. Add the path to the WebDriver executable to your system's PATH environment variable.
+
+### Running the Tests
 
 To run the tests:
 
@@ -54,3 +68,8 @@ To run the tests:
 
 ### Modifying Test Configuration
 If you are running the app locally and wish to run the Selenium tests against it, replace the URL in the test scripts from `cs458.gahmed.com` to your local server's URL, typically `http://localhost:3000`
+
+Additionally, make sure to update the WebDriver initialization in the test scripts to match your browser and WebDriver setup. For example, if using Chrome:
+```python
+driver = webdriver.Chrome()
+```
