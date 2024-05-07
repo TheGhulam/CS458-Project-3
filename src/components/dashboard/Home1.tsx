@@ -25,7 +25,8 @@ const Home1 = () => {
   }, [])
 
   const calculateDistance = () => {
-    if (latitude && longitude) {
+    // if (latitude && longitude) {
+    if (latitude !== null && longitude !== null) {
       if (isNaN(latitude) || isNaN(longitude)) {
         setError("Invalid latitude or longitude. Please enter valid numbers.")
         return
@@ -106,17 +107,29 @@ const Home1 = () => {
         )}
         <TextField
           label="Latitude"
-          value={latitude || ""}
-          onChange={(e) => setLatitude(parseFloat(e.target.value))}
+          type="number"
+          value={latitude !== null ? latitude : ""}
+          onChange={(e) => setLatitude(e.target.value !== "" ? parseFloat(e.target.value) : null)}
           fullWidth
           margin="normal"
+          inputProps={{
+            step: "any",
+            min: -90,
+            max: 90,
+          }}
         />
         <TextField
           label="Longitude"
-          value={longitude || ""}
-          onChange={(e) => setLongitude(parseFloat(e.target.value))}
+          type="number"
+          value={longitude !== null ? longitude : ""}
+          onChange={(e) => setLongitude(e.target.value !== "" ? parseFloat(e.target.value) : null)}
           fullWidth
           margin="normal"
+          inputProps={{
+            step: "any",
+            min: -180,
+            max: 180,
+          }}
         />
         <Button variant="contained" color="primary" onClick={calculateDistance}>
           Calculate Distance
