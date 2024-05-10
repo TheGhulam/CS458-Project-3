@@ -20,7 +20,7 @@ const HomePage = () => {
     <>
       <DashboardLayout>
         <Head>
-          <title>{`Dashboard | ${data?.payload?.name}`}</title>
+          <title>{`Nearest Sea`}</title>
         </Head>
         <Home user={data?.payload} />
       </DashboardLayout>

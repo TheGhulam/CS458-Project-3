@@ -20,7 +20,7 @@ const HomePage1 = () => {
     <>
       <DashboardLayout>
         <Head>
-          <title>{`Dashboard | ${data?.payload?.name}`}</title>
+          <title>{`Distance to Sun`}</title>
         </Head>
         <Home1 />
       </DashboardLayout>
