@@ -2,7 +2,24 @@ import { UserModelSchemaType } from "@/schema/UserSchema"
 import React, { useEffect, useState } from "react"
 import { Button, Container, Paper, Typography } from "@mui/material"
 import Link from "next/link"
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+
+import dynamic from 'next/dynamic';
+
+const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
+  ssr: false,
+});
+const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
+  ssr: false,
+});
+const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), {
+  ssr: false,
+});
+const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
+  ssr: false,
+});
+const Polyline = dynamic(() => import('react-leaflet').then((mod) => mod.Polyline), {
+  ssr: false,
+});
 import 'leaflet/dist/leaflet.css';
 
 interface IProps {
