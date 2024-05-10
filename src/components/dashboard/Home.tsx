@@ -2,6 +2,8 @@ import { UserModelSchemaType } from "@/schema/UserSchema"
 import React, { useEffect, useState } from "react"
 import { Button, Container, Paper, Typography } from "@mui/material"
 import Link from "next/link"
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface IProps {
   user: Omit<UserModelSchemaType, "password">
@@ -39,6 +41,7 @@ const nearestSeas: SeaLocation[] = [
 const Home = ({ user }: IProps) => {
   const [nearestSea, setNearestSea] = useState<SeaLocation | null>(null)
   const [distance, setDistance] = useState<number | null>(null)
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -48,6 +51,7 @@ const Home = ({ user }: IProps) => {
           userlat = userLatitude
           const userLongitude = position.coords.longitude
           userlong = userLongitude
+          setUserLocation([userLatitude, userLongitude])
 
           let minDistance = Infinity
           let closestSea: SeaLocation | null = null
@@ -95,20 +99,34 @@ const Home = ({ user }: IProps) => {
       }}
     >
       <Container maxWidth={false}>
-        <Typography variant="h4" >
-          Nearest Sea
+        <Typography variant="h4">Nearest Sea</Typography>
+        <Typography variant="caption" gutterBottom>
+          based on your location
         </Typography>
-        <Typography variant='caption' gutterBottom>
-          based on your location ({userlat}, {userlong})
-        </Typography>
-        {nearestSea && distance && (
-          <Typography variant="body1" marginTop={5}>
-            The nearest sea is {nearestSea.name}, approximately {distance.toFixed(2)} kilometers away.
-          </Typography>
+        {nearestSea && distance && userLocation && (
+          <>
+            <Typography variant="body1" marginTop={5}>
+              The nearest sea is {nearestSea.name}, approximately {distance.toFixed(2)} kilometers away.
+            </Typography>
+            <MapContainer
+              center={[userLocation[0], userLocation[1]]}
+              zoom={4}
+              style={{ height: '400px', width: '100%', marginTop: '20px' }}
+            >
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Polyline
+                positions={[
+                  [userLocation[0], userLocation[1]],
+                  [nearestSea.latitude, nearestSea.longitude],
+                ]}
+                color="red"
+              />
+            </MapContainer>
+          </>
         )}
       </Container>
     </Paper>
-  )
-}
+  );
+};
 
 export default Home
