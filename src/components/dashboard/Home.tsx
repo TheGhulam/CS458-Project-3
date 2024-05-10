@@ -118,7 +118,7 @@ const Home = ({ user }: IProps) => {
       <Container maxWidth={false}>
         <Typography variant="h4">Nearest Sea</Typography>
         <Typography variant="caption" gutterBottom>
-          based on your location
+          based on your location ({userlat}, {userlong})
         </Typography>
         {nearestSea && distance && userLocation && (
           <>
